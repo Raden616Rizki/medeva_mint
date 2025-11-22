@@ -3,7 +3,26 @@ import employeeService from "../services/employee.service.js";
 // Create New Employee => POST /employees
 export const create = async (req, res, next) => {
   try {
-    const required = ["fullName", "username", "email", "password"];
+    const required = [
+      "full_name",
+      "username",
+      "password",
+      "email",
+      "nik",
+      "gender",
+      "birth_place",
+      "birth_date",
+      "marriage_status",
+      "contract_start",
+      "contract_end",
+      "position",
+      "address",
+      "province",
+      "city",
+      "subdistrict",
+      "ward",
+      "postal_code",
+    ];
 
     for (let field of required) {
       if (!req.body[field]) {

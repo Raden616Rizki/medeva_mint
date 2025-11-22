@@ -7,28 +7,58 @@ const Op = db.Sequelize.Op;
 
 export default {
   // Create new employee
-  async createEmployee(data) {
+  async createEmployee(data, file) {
     const {
-      fullName,
+      full_name,
       username,
       email,
       phone,
-      position,
+      nik,
       departmentsId,
+      gender,
+      birth_place,
+      birth_date,
+      marriage_status,
+      role,
+      status,
+      contract_start,
+      contract_end,
+      position,
+      address,
+      province,
+      city,
+      subdistrict,
+      ward,
+      postal_code,
+      avatar_url,
       password,
-      avatarUrl,
     } = data;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const employee = await Employee.create({
-      fullName,
+      full_name,
       username,
       email,
       phone,
+      nik,
+      gender,
+      birth_place,
+      birth_date,
+      marriage_status,
+      role,
+      status,
+      contract_start,
+      contract_end,
       position,
+      address,
+      province,
+      city,
+      subdistrict,
+      ward,
+      postal_code,
+      avatar_url,
       password: hashedPassword,
-      avatarUrl,
     });
 
     if (Array.isArray(departmentsId) && departmentsId.length > 0) {
