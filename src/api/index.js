@@ -2,11 +2,13 @@ import express from "express";
 import cors from "cors";
 import db from "./src/models/index.js";
 import employeeRoutes from "./src/routes/employee.routes.js";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.development" });
 
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "http://localhost:7000",
 };
 
 app.use(cors(corsOptions));
@@ -20,7 +22,7 @@ app.get("/", (req, res) => {
 employeeRoutes(app);
 
 db.sequelize.sync().then(() => {
-  console.log("Synced db.");
+  console.log("Database synchronized");
 });
 
 const PORT = process.env.PORT || 8080;
