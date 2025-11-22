@@ -46,7 +46,7 @@ export const create = async (req, res) => {
 };
 
 // Get All Employees Data => GET /employees?search=&page=
-export const getEmployees = async (req, res) => {
+export const findAll = async (req, res) => {
     try {
         const search = req.query.search || "";
         const page = parseInt(req.query.page) || 1;
@@ -83,7 +83,7 @@ export const getEmployees = async (req, res) => {
 };
 
 // Get Employee Data by ID => GET /employees/:id
-export const getEmployeeById = async (req, res) => {
+export const findOne = async (req, res) => {
     try {
         const id = req.params.id;
 
@@ -102,7 +102,7 @@ export const getEmployeeById = async (req, res) => {
 };
 
 // Update Employee Data by ID => PUT /employees/:id
-export const updateEmployee = async (req, res) => {
+export const update = async (req, res) => {
     try {
         const id = req.params.id;
 
@@ -123,7 +123,7 @@ export const updateEmployee = async (req, res) => {
         res.json(refreshedData);
     } catch (err) {
         res.status(500).json({
-            message: err.message || "Terjadi kesalahan saat mengupdate employee.",
+            message: err.message || "Terjadi kesalahan saat memperbarui data karyawan",
         });
     }
 };
