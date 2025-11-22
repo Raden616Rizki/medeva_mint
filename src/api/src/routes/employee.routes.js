@@ -1,6 +1,6 @@
 import * as employees from "../controller/employee.controller.js";
 import express from "express";
-import { uploadImage } from "../middleware/multer.js";
+import uploadImage from "../middleware/multer.js";
 
 export default (app) => {
     const router = express.Router();

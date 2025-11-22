@@ -23,7 +23,7 @@ db.employees = EmployeeModel(sequelize, Sequelize);
 db.departments = DepartmentModel(sequelize, Sequelize);
 db.employeeDepartments = EmployeeDepartmentModel(sequelize, Sequelize);
 
-// Employee Departement Many-to-Many Relationship
+// Employee Department Many-to-Many Relationship
 db.employees.belongsToMany(db.departments, {
     through: db.employeeDepartments,
     foreignKey: "employee_id",

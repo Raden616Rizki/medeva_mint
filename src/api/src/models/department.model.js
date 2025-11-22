@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
-  const Departement = sequelize.define(
-    "departements",
+  const Department = sequelize.define(
+    "departments",
     {
       id: {
         type: Sequelize.UUID,
@@ -28,5 +28,5 @@ export default (sequelize, Sequelize) => {
     }
   );
 
-  return Departement;
+  return Department;
 };
