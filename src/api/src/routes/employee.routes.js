@@ -18,7 +18,7 @@ export default (app) => {
     router.get("/department/:departmentId", employees.findByDepartmentId);
 
     // PUT /employees/:id
-    router.put("/:id", employees.update);
+    router.put("/:id", uploadImage.single("avatar"), employees.update);
 
     app.use("/api/employees", router);
 };
