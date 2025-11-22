@@ -142,6 +142,11 @@ export default (sequelize, Sequelize) => {
     },
     {
       timestamps: false,
+      defaultScope: {
+        attributes: {
+          exclude: ["password", "created_at", "updated_at"],
+        },
+      },
     }
   );
 

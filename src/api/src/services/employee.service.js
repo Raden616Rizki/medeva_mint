@@ -68,7 +68,7 @@ export default {
     return employee;
   },
 
-  // Get employees (with search, pagination and position)
+  // Get employees (with search, pagination, position, state)
   async getEmployees({ search = "", page = 1, position = "", state = "" }) {
     const limit = 10;
     const offset = (page - 1) * limit;
