@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
   const Employee = sequelize.define(
-    "employee",
+    "employees",
     {
       id: {
         type: Sequelize.UUID,
@@ -81,6 +81,10 @@ export default (sequelize, Sequelize) => {
       contract_end: {
         type: Sequelize.DATEONLY,
       },
+
+      position: { 
+        type: Sequelize.STRING 
+    },
 
       // Address Details
       address: {
