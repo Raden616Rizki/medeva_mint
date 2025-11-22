@@ -13,7 +13,15 @@ export const create = async (req, res, next) => {
       }
     }
 
-    const employee = await employeeService.createEmployee(req.body);
+    const avatarUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const payload = {
+      ...req.body,
+      avatarUrl,
+    };
+
+    const employee = await employeeService.createEmployee(payload);
+
     res.status(201).json(employee);
   } catch (err) {
     next(err);
@@ -81,13 +89,23 @@ export const findByDepartmentId = async (req, res, next) => {
 // Update Employee => PUT /employees/:id
 export const update = async (req, res, next) => {
   try {
+    const employeeId = req.params.id;
+
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      updateData.avatarUrl = `/uploads/${req.file.filename}`;
+    }
+
     const updatedEmployee = await employeeService.updateEmployee(
-      req.params.id,
-      req.body
+      employeeId,
+      updateData
     );
 
     if (!updatedEmployee) {
-      return res.status(404).json({ message: "Karyawan tidak ditemukan" });
+      return res.status(404).json({
+        message: "Karyawan tidak ditemukan",
+      });
     }
 
     res.json(updatedEmployee);

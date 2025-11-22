@@ -1,11 +1,12 @@
 import * as employees from "../controller/employee.controller.js";
 import express from "express";
+import { uploadImage } from "../middleware/multer.js";
 
 export default (app) => {
     const router = express.Router();
 
     // POST /employees
-    router.post("/", employees.create);
+    router.post("/", uploadImage.single("avatar"), employees.create);
 
     // GET /employees?search=&page=&position=
     router.get("/", employees.findAll);
