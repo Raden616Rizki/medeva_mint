@@ -1,129 +1,73 @@
-import db from "../models/index.js";
-import bcrypt from "bcrypt";
-
-const Employee = db.employees;
-const Op = db.Sequelize.Op;
+import employeeService from "../services/employee.service.js";
 
 // Create New Employee => POST /employees
-export const create = async (req, res) => {
+export const create = async (req, res, next) => {
     try {
-        const {
-            fullName,
-            username,
-            email,
-            phone,
-            position,
-            department,
-            password,
-            avatarUrl,
-        } = req.body;
+        const required = ["fullName", "username", "email", "password"];
 
-        if (!fullName || !username || !email || !password) {
-            return res.status(400).json({
-                message: "Nama lengkap, username, email, dan password wajib diisi!",
-            });
+        for (let field of required) {
+            if (!req.body[field]) {
+                return res.status(400).json({
+                    message: `Field ${field} wajib diisi`,
+                });
+            }
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const employee = await Employee.create({
-            fullName,
-            username,
-            email,
-            phone,
-            position,
-            department,
-            password: hashedPassword,
-            avatarUrl,
-        });
-
+        const employee = await employeeService.createEmployee(req.body);
         res.status(201).json(employee);
     } catch (err) {
-        res.status(500).json({
-            message: err.message || "Terjadi kesalahan saat menambahkan data karyawan",
-        });
+        next(err);
     }
 };
 
-// Get All Employees Data => GET /employees?search=&page=
-export const findAll = async (req, res) => {
+// Get All Employees => GET /employees?search=&page=
+export const findAll = async (req, res, next) => {
     try {
         const search = req.query.search || "";
         const page = parseInt(req.query.page) || 1;
-        const limit = 10;
-        const offset = (page - 1) * limit;
 
-        const whereCondition = search
-            ? {
-                  [Op.or]: [
-                      { username: { [Op.like]: `%${search}%` } },
-                      { fullName: { [Op.like]: `%${search}%` } },
-                  ],
-              }
-            : {};
-
-        const result = await Employee.findAndCountAll({
-            where: whereCondition,
-            limit,
-            offset,
-            order: [["created_at", "DESC"]],
-        });
+        const result = await employeeService.getEmployees({ search, page });
 
         res.json({
             totalItems: result.count,
             currentPage: page,
-            totalPages: Math.ceil(result.count / limit),
+            totalPages: Math.ceil(result.count / 10),
             employees: result.rows,
         });
     } catch (err) {
-        res.status(500).json({
-            message: err.message || "Terjadi kesalahan saat mengambil data karyawan",
-        });
+        next(err);
     }
 };
 
-// Get Employee Data by ID => GET /employees/:id
-export const findOne = async (req, res) => {
+// Get Employee by ID => GET /employees/:id
+export const findOne = async (req, res, next) => {
     try {
-        const id = req.params.id;
-
-        const employee = await Employee.findByPk(id);
+        const employee = await employeeService.getEmployeeById(req.params.id);
 
         if (!employee) {
-            return res.status(404).json({ message: "Data karyawan tidak ditemukan" });
+            return res.status(404).json({ message: "Karyawan tidak ditemukan" });
         }
 
         res.json(employee);
     } catch (err) {
-        res.status(500).json({
-            message: err.message || "Terjadi kesalahan saat mengambil data karyawan",
-        });
+        next(err);
     }
 };
 
-// Update Employee Data by ID => PUT /employees/:id
-export const update = async (req, res) => {
+// Update Employee => PUT /employees/:id
+export const update = async (req, res, next) => {
     try {
-        const id = req.params.id;
+        const updatedEmployee = await employeeService.updateEmployee(
+            req.params.id,
+            req.body
+        );
 
-        const employee = await Employee.findByPk(id);
-        if (!employee) {
-            return res.status(404).json({ message: "Data karyawan tidak ditemukan." });
+        if (!updatedEmployee) {
+            return res.status(404).json({ message: "Karyawan tidak ditemukan" });
         }
 
-        const updatedData = { ...req.body };
-
-        if (req.body.password) {
-            updatedData.password = await bcrypt.hash(req.body.password, 10);
-        }
-
-        await Employee.update(updatedData, { where: { id } });
-
-        const refreshedData = await Employee.findByPk(id);
-        res.json(refreshedData);
+        res.json(updatedEmployee);
     } catch (err) {
-        res.status(500).json({
-            message: err.message || "Terjadi kesalahan saat memperbarui data karyawan",
-        });
+        next(err);
     }
 };
