@@ -50,13 +50,14 @@ export const create = async (req, res, next) => {
 // Get All Employees => GET /employees?search=&page=&position=&status=
 export const findAll = async (req, res, next) => {
   try {
-    const { search, page, position, status } = req.query;
+    const { search, page, position, status, departmentId } = req.query;
 
     const result = await employeeService.getEmployees({
       search,
       page,
       position,
       status,
+      departmentId,
     });
 
     res.json({
@@ -80,27 +81,6 @@ export const findOne = async (req, res, next) => {
     }
 
     res.json(employee);
-  } catch (err) {
-    next(err);
-  }
-};
-
-// Get Employees by Department ID => GET /employees/department/:departmentId
-export const findByDepartmentId = async (req, res, next) => {
-  try {
-    const departmentId = req.params.departmentId;
-
-    const employees = await employeeService.getEmployeesByDepartmentId(
-      departmentId
-    );
-
-    if (!employees || employees.length === 0) {
-      return res.status(404).json({
-        message: "Tidak ada karyawan dalam departemen tersebut",
-      });
-    }
-
-    res.json(employees);
   } catch (err) {
     next(err);
   }

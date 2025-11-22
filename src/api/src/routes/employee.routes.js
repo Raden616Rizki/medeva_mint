@@ -13,9 +13,6 @@ export default (app) => {
 
     // GET /employees/:id
     router.get("/:id", employees.findOne);
-    
-    // GET /employees/department/:departmentId
-    router.get("/department/:departmentId", employees.findByDepartmentId);
 
     // PUT /employees/:id
     router.put("/:id", uploadImage.single("avatar"), employees.update);

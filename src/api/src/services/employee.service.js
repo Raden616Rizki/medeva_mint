@@ -68,13 +68,20 @@ export default {
     return employee;
   },
 
-  // Get employees (with search, pagination, position, status)
-  async getEmployees({ search = "", page = 1, position = "", status = "" }) {
+  // Get employees (with search, pagination, position, status, departementId)
+  async getEmployees({
+    search = "",
+    page = 1,
+    position = "",
+    status = "",
+    departmentId = "",
+  }) {
     const limit = 10;
     const offset = (page - 1) * limit;
 
     const whereCondition = {};
 
+    // Search by Username or Full Name
     if (search) {
       whereCondition[Op.or] = [
         { username: { [Op.like]: `%${search}%` } },
@@ -82,31 +89,42 @@ export default {
       ];
     }
 
+    // Search by Position
     if (position) {
       whereCondition.position = {
         [Op.like]: `%${position}%`,
       };
     }
 
+    // Search by Status => ACTIVE / INACTIVE
     if (status) {
       whereCondition.status = status;
     }
 
+    // Include condition
+    const includeConditions = [
+      {
+        model: Department,
+        through: { attributes: [] },
+        attributes: ["id", "name"],
+        required: false,
+      },
+    ];
+
+    // Search by Department ID
+    if (departmentId) {
+      includeConditions[0].where = { id: departmentId };
+      includeConditions[0].required = true;
+    }
+
     const result = await Employee.findAndCountAll({
       where: whereCondition,
-      include: [
-        {
-          model: Department,
-          through: { attributes: [] },
-          attributes: ["id", "name"],
-          required: false,
-        },
-      ],
+      include: includeConditions,
       distinct: true,
       col: "id",
       limit,
       offset,
-      order: [["created_at", "DESC"]],
+      order: [["full_name", "ASC"]],
       subQuery: false,
     });
 
@@ -119,19 +137,6 @@ export default {
       include: [
         {
           model: Department,
-          through: { attributes: [] },
-        },
-      ],
-    });
-  },
-
-  // Get employee by Department ID
-  async getEmployeesByDepartmentId(departmentId) {
-    return await Employee.findAll({
-      include: [
-        {
-          model: Department,
-          where: { id: departmentId },
           through: { attributes: [] },
         },
       ],
