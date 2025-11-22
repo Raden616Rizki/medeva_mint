@@ -7,11 +7,14 @@ export default (app) => {
     // POST /employees
     router.post("/", employees.create);
 
-    // GET /employees?search=&page=
+    // GET /employees?search=&page=&position=
     router.get("/", employees.findAll);
 
     // GET /employees/:id
     router.get("/:id", employees.findOne);
+    
+    // GET /employees/department/:departmentId
+    router.get("/department/:departmentId", employees.findByDepartmentId);
 
     // PUT /employees/:id
     router.put("/:id", employees.update);
