@@ -32,11 +32,11 @@ export const create = async (req, res, next) => {
       }
     }
 
-    const avatarUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    const avatar_url = req.file ? `/uploads/${req.file.filename}` : null;
 
     const payload = {
       ...req.body,
-      avatarUrl,
+      avatar_url,
     };
 
     const employee = await employeeService.createEmployee(payload);
@@ -47,15 +47,16 @@ export const create = async (req, res, next) => {
   }
 };
 
-// Get All Employees => GET /employees?search=&page=&position=
+// Get All Employees => GET /employees?search=&page=&position=&state=
 export const findAll = async (req, res, next) => {
   try {
-    const { search, page, position } = req.query;
+    const { search, page, position, state } = req.query;
 
     const result = await employeeService.getEmployees({
       search,
       page,
       position,
+      state,
     });
 
     res.json({

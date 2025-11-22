@@ -8,7 +8,7 @@ export default (app) => {
     // POST /employees
     router.post("/", uploadImage.single("avatar"), employees.create);
 
-    // GET /employees?search=&page=&position=
+    // GET /employees?search=&page=&position=&state=
     router.get("/", employees.findAll);
 
     // GET /employees/:id

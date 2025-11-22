@@ -69,39 +69,50 @@ export default {
   },
 
   // Get employees (with search, pagination and position)
-  async getEmployees({ search = "", page = 1, position = "" }) {
+  async getEmployees({ search = "", page = 1, position = "", state = "" }) {
     const limit = 10;
     const offset = (page - 1) * limit;
 
     const whereCondition = {};
 
-    // Pencarian nama / username
     if (search) {
       whereCondition[Op.or] = [
         { username: { [Op.like]: `%${search}%` } },
-        { fullName: { [Op.like]: `%${search}%` } },
+        { full_Name: { [Op.like]: `%${search}%` } },
       ];
     }
 
-    // Filter posisi
     if (position) {
       whereCondition.position = {
         [Op.like]: `%${position}%`,
       };
     }
 
-    return await Employee.findAndCountAll({
+    if (state) {
+      whereCondition.status = {
+        [Op.like]: `%${state}%`,
+      };
+    }
+
+    const result = await Employee.findAndCountAll({
       where: whereCondition,
-      limit,
-      offset,
-      order: [["created_at", "DESC"]],
       include: [
         {
           model: Department,
           through: { attributes: [] },
+          attributes: ["id", "name"],
+          required: false,
         },
       ],
+      distinct: true,
+      col: "id",
+      limit,
+      offset,
+      order: [["created_at", "DESC"]],
+      subQuery: false,
     });
+
+    return result;
   },
 
   // Get employee by ID
