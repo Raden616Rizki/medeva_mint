@@ -68,8 +68,8 @@ export default {
     return employee;
   },
 
-  // Get employees (with search, pagination, position, state)
-  async getEmployees({ search = "", page = 1, position = "", state = "" }) {
+  // Get employees (with search, pagination, position, status)
+  async getEmployees({ search = "", page = 1, position = "", status = "" }) {
     const limit = 10;
     const offset = (page - 1) * limit;
 
@@ -78,7 +78,7 @@ export default {
     if (search) {
       whereCondition[Op.or] = [
         { username: { [Op.like]: `%${search}%` } },
-        { full_Name: { [Op.like]: `%${search}%` } },
+        { full_name: { [Op.like]: `%${search}%` } },
       ];
     }
 
@@ -88,10 +88,8 @@ export default {
       };
     }
 
-    if (state) {
-      whereCondition.status = {
-        [Op.like]: `%${state}%`,
-      };
+    if (status) {
+      whereCondition.status = status;
     }
 
     const result = await Employee.findAndCountAll({

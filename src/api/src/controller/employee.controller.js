@@ -47,16 +47,16 @@ export const create = async (req, res, next) => {
   }
 };
 
-// Get All Employees => GET /employees?search=&page=&position=&state=
+// Get All Employees => GET /employees?search=&page=&position=&status=
 export const findAll = async (req, res, next) => {
   try {
-    const { search, page, position, state } = req.query;
+    const { search, page, position, status } = req.query;
 
     const result = await employeeService.getEmployees({
       search,
       page,
       position,
-      state,
+      status,
     });
 
     res.json({
