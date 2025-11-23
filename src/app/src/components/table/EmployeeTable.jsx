@@ -14,13 +14,16 @@ export default function EmployeeTable({ employees }) {
         </thead>
 
         <tbody>
-          {employees.map((e) => (
-            <tr key={e.number} className="border-t border-gray-300 hover:bg-gray-50">
-              <td className="p-3 font-semibold text-gray-600">{e.number}</td>
+          {employees?.map((e, index) => (
+            <tr key={e.id} className="border-t border-gray-300 hover:bg-gray-50">
+              <td className="p-3 font-semibold text-gray-600">{index + 1}</td>
 
               <td className="p-3">
-                <p className="font-bold text-sm">{e.name}</p>
-                <p className="text-sm text-gray-600">{e.roles}</p>
+                <p className="font-bold text-sm">{e.full_name}</p>
+
+                <p className="text-sm text-gray-600">
+                  {e.departments.map(d => d.name).join(", ") ?? "-"}
+                </p>
 
                 <span className="text-[10px] font-semibold bg-green-700 text-white px-2 py-0.5 rounded-md inline-block mt-1">
                   Aktif
