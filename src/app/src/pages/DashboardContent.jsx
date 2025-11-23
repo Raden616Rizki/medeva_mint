@@ -6,6 +6,7 @@ import SearchBar from "../components/filters/SearchBar";
 import EmployeeTable from "../components/table/EmployeeTable";
 import Pagination from "../components/pagination/Pagination";
 import HeaderActionMenu from "../components/menu/HeaderActionMenu";
+import EmployeeFormModal from "../components/modal/EmployeeFormModal";
 
 export default function DashboardContent() {
     const employees = [
@@ -17,6 +18,9 @@ export default function DashboardContent() {
 
     const [selectedDept, setSelectedDept] = useState("");
     const [selectedPosition, setSelectedPosition] = useState("");
+
+    // 🔥 STATE MODAL
+    const [openForm, setOpenForm] = useState(false);
 
     const departments = [
         "Purchasing",
@@ -36,14 +40,14 @@ export default function DashboardContent() {
     ];
 
     const handleCreate = () => {
-        alert("Aksi Tambah Karyawan dipilih!");
+        setOpenForm(true);
     };
 
     return (
         <div className="bg-white shadow-md rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-normal font-semibold">
-                    Data Karyawan & Tenaga Kesehatan
+                    DATA KARYAWAN DAN TENAGA KESEHATAN
                 </h1>
 
                 <HeaderActionMenu onAdd={handleCreate} />
@@ -65,6 +69,11 @@ export default function DashboardContent() {
             <EmployeeTable employees={employees} />
 
             <Pagination />
+
+            <EmployeeFormModal 
+                open={openForm} 
+                onClose={() => setOpenForm(false)} 
+            />
         </div>
     );
 }
