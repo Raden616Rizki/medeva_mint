@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StatusFilter from "../components/filters/StatusFilter";
 import DepartmentFilter from "../components/filters/DepartmentFilter";
+import PositionFilter from "../components/filters/PositionFilter";
 import SearchBar from "../components/filters/SearchBar";
 import EmployeeTable from "../components/table/EmployeeTable";
 import Pagination from "../components/pagination/Pagination";
@@ -15,6 +16,7 @@ export default function DashboardContent() {
     ];
 
     const [selectedDept, setSelectedDept] = useState("");
+    const [selectedPosition, setSelectedPosition] = useState("");
 
     const departments = [
         "Purchasing",
@@ -24,6 +26,13 @@ export default function DashboardContent() {
         "Dokter",
         "Perawat",
         "Apoteker",
+    ];
+
+    const positions = [
+        "Dokter",
+        "Perawat",
+        "Bidan",
+        "dll",
     ];
 
     const handleCreate = () => {
@@ -44,6 +53,11 @@ export default function DashboardContent() {
                 departments={departments}
                 selected={selectedDept}
                 onChange={setSelectedDept}
+            />
+            <PositionFilter
+                departments={positions}
+                selected={selectedPosition}
+                onChange={setSelectedPosition}
             />
             <StatusFilter />
             <SearchBar />

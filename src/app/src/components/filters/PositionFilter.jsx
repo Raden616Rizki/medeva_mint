@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function DepartmentFilter({ departments, selected, onChange }) {
+export default function PositionFilter({ departments, selected, onChange }) {
   return (
     <div className="mb-4 relative">
       <select
@@ -13,7 +13,7 @@ export default function DepartmentFilter({ departments, selected, onChange }) {
           text-sm
         "
       >
-        <option value="">Semua Departemen</option>
+        <option value="">Semua Posisi</option>
 
         {departments.map((dept, i) => (
           <option key={i} value={dept}>
