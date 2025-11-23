@@ -153,6 +153,10 @@ export default {
 
     const updatedData = { ...data };
 
+    delete updatedData.created_at;
+
+    updatedData.updated_at = new Date();
+
     if (data.password) {
       updatedData.password = await bcrypt.hash(data.password, 10);
     }
